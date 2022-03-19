@@ -1,8 +1,10 @@
-let hexagons, lit = 0, nearestHexagon;
-const radius = 60;
+let hexagons, held, nearestHexagon;
+const radius = 20;
+const xSize = 400;
+const ySize = 400;
 
 function setup() {
-  createCanvas(screen.width, screen.height);
+  createCanvas(xSize, ySize);
   hexagons = [];
 
   let overlap = radius - (radius * sin(degrees(60)));
@@ -31,18 +33,14 @@ function draw() {
     }
   });
   //line(nearestHexagon.x, nearestHexagon.y, mouseX, mouseY);
-
-  document.title = lit;
 }
 
 function mousePressed() {
-  if (!nearestHexagon.light) {
-    nearestHexagon.light = true;
-    lit++;
-  } else {
-    nearestHexagon.light = false;
-    lit--;
-  }
+  if (!held) {
+      nearestHexagon.light = !nearestHexagon.light;
+      held = true;
+    }
+  held = false;
 }
 
 function keyPressed(e) {
@@ -51,12 +49,24 @@ function keyPressed(e) {
       hexagons.forEach(h => {
         h.light = false;
       });
-      lit = 0;
       break;
     case 'l':
       hexagons.forEach(h => {
         h.white = !h.white;
       });
       break;
+    case 'g':
+      generatePattern(100);
+      break;
   }
+}
+
+function generatePattern(size, x = xSize/2, y = ySize/2) {
+  hexagons.forEach(h => {
+    let distance = h.distanceToPoint(x, y);
+    distance = (Math.max(0, (size - distance))) / size;
+    if (random(0, 1) < distance) {
+      h.light = true;
+    }
+  });
 }

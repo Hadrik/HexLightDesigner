@@ -36,6 +36,10 @@ class Hexagon {
   }
   
   get distanceToMouse() {
-    return dist(mouseX, mouseY, this.x, this.y);
+    return this.distanceToPoint(mouseX, mouseY);
+  }
+  
+  distanceToPoint(x, y) {
+    return dist(x, y, this.x, this.y);
   }
 }
