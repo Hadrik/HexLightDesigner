@@ -1,9 +1,10 @@
-let hexagons, held, nearestHexagon, patternSize = 100, showCircle = false;
+let hexagons, held, count, nearestHexagon, patternSize = 100, showCircle = false;
 let radius = 20;
 const xSize = screen.width;
 const ySize = screen.height;
 
 function setup() {
+  count = 0;
   createCanvas(xSize, ySize);
   hexagons = [];
 
@@ -36,23 +37,24 @@ function draw() {
     stroke('red');
     circle(xSize / 2, ySize / 2, patternSize * 2);
   }
+  document.title = `Hexagons: ${count}`;
   //line(nearestHexagon.x, nearestHexagon.y, mouseX, mouseY);
 }
 
 function mousePressed() {
-  if (!held) {
-      nearestHexagon.light = !nearestHexagon.light;
-      held = true;
-    }
-  held = false;
+  if (!nearestHexagon.light) {
+    nearestHexagon.light = true;
+    count++;
+  } else {
+    nearestHexagon.light = false;
+    count--;
+  }
 }
 
 function keyPressed(e) {
   switch (e.key) {
     case 'c':
-      hexagons.forEach(h => {
-        h.light = false;
-      });
+      clr();
       break;
     case 'l':
       hexagons.forEach(h => {
@@ -83,11 +85,20 @@ function keyPressed(e) {
 }
 
 function generatePattern(size, x = xSize/2, y = ySize/2) {
+  clr();
   hexagons.forEach(h => {
     let distance = h.distanceToPoint(x, y);
     distance = (Math.max(0, (size - distance))) / size;
     if (random(0, 1) < distance) {
       h.light = true;
+      count++;
     }
   });
+}
+
+function clr() {
+  hexagons.forEach(h => {
+    h.light = false;
+  });
+  count = 0;
 }
