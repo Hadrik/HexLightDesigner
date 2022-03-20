@@ -1,13 +1,13 @@
-let hexagons, held, nearestHexagon;
-const radius = 20;
-const xSize = 400;
-const ySize = 400;
+let hexagons, held, nearestHexagon, patternSize = 100, showCircle = false;
+let radius = 20;
+const xSize = screen.width;
+const ySize = screen.height;
 
 function setup() {
   createCanvas(xSize, ySize);
   hexagons = [];
 
-  let overlap = radius - (radius * sin(degrees(60)));
+  const overlap = radius - (radius * sin(degrees(60)));
   
   let move = false;
   for (let i = 0; i < height + radius; i += (2 * radius) - (2 * overlap)) {
@@ -32,6 +32,10 @@ function draw() {
       nearestHexagon = h;
     }
   });
+  if (showCircle) {
+    stroke('red');
+    circle(xSize / 2, ySize / 2, patternSize * 2);
+  }
   //line(nearestHexagon.x, nearestHexagon.y, mouseX, mouseY);
 }
 
@@ -56,7 +60,24 @@ function keyPressed(e) {
       });
       break;
     case 'g':
-      generatePattern(100);
+      generatePattern(patternSize);
+      break;
+    case '+':
+      patternSize += 25;
+      break;
+    case '-':
+      patternSize -= 25;
+      break;
+    case 'h':
+      showCircle = !showCircle;
+      break;
+    case 'ArrowUp':
+      radius += 10;
+      setup();
+      break;
+    case 'ArrowDown':
+      if (radius > 10 + 10) radius -= 10;
+      setup();
       break;
   }
 }
