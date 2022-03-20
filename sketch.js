@@ -1,7 +1,7 @@
 let hexagons, held, count, nearestHexagon, patternSize = 100, showCircle = false;
 let radius = 20;
-const xSize = screen.width;
-const ySize = screen.height;
+const xSize = window.innerWidth;
+const ySize = window.innerHeight;
 
 function setup() {
   count = 0;
